@@ -245,4 +245,11 @@ $(document).ready(function () {
         },
     });
 
+    $("#micBtn").click(function () {
+        $('#Oval').attr("hidden", true);
+        $('#siriwave').attr("hidden", false);
+        eel.playClickSound();
+    });
+
+
 });

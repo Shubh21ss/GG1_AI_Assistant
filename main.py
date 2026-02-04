@@ -1,6 +1,6 @@
 import os
 import eel
-from engin.features import *
+from engine.features import *
 eel.init('www')
 
 playAssistSound()
