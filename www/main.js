@@ -248,7 +248,9 @@ $(document).ready(function () {
     $("#micBtn").click(function () {
         $('#Oval').attr("hidden", true);
         $('#siriwave').attr("hidden", false);
-        eel.playClickSound();
+        eel.playClickSound();        
+        eel.take_command()();        
+
     });
 
 
