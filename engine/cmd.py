@@ -1,3 +1,4 @@
+import time
 import pyttsx3
 import speech_recognition as sr
 import eel
@@ -5,6 +6,7 @@ import eel
 def speak_text(text):
     engine = pyttsx3.init()
     engine.setProperty('rate', 150)  # Speed percent (can go over 100)
+    eel.DisplayText(text)  # Display the text in the GUI
     engine.say(text)
     engine.runAndWait()
 
@@ -14,7 +16,7 @@ def take_command():
     with sr.Microphone() as source:
         print("Listening...")
         eel.DisplayText("Listening...")
-        r.pause_threshold = 1 # seconds of non-speaking before a phrase is considered complete
+        r.pause_threshold = 5 # seconds of non-speaking before a phrase is considered complete
         r.adjust_for_ambient_noise(source) # adjust for ambient noise
         audio = r.listen(source, timeout=10, phrase_time_limit=6) # 10 seconds to wait for a phrase, 6 seconds max phrase length
 
@@ -24,8 +26,9 @@ def take_command():
         query = r.recognize_google(audio, language='en-in')
         print(f"User said: {query}\n")
         # speak_text(f"You said: {query}")
+        time.sleep(5)
         eel.DisplayText(query)
-        eel.ShowHood()
+        # eel.ShowHood()
 
 
     except Exception as e:
@@ -47,5 +50,11 @@ def allCMDs():
         # print("Opening application...")
         from engine.features import openApp
         openApp(query)
+
+    elif 'on youtube':
+        from engine.features import PlayYT
+        PlayYT(query)
     else:
         print("Command not recognized.")
+
+    eel.ShowHood()

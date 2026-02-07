@@ -1,10 +1,12 @@
 import os
+import re
 import pygame.mixer
 import pygame.time
 import eel
 
 from engine.cmd import speak_text
 from engine.config import Assistant_Name
+import pywhatkit as kit
 
 
 #sound function for assistant startup sound
@@ -48,3 +50,19 @@ def openApp(query):
 
     else:
         speak_text(f"{query} is not recognized. Please try again.")
+
+
+def PlayYT(query):
+    search_query = extractYTSearchQuery(query)
+    if search_query:
+        speak_text(f"Playing {search_query} on YouTube")
+        # os.system(f'start https://www.youtube.com/results?search_query={search_query}')
+        kit.playonyt(search_query)
+    else:
+        speak_text("Sorry, I couldn't extract the search query. Please try again.")
+
+
+def extractYTSearchQuery(query):
+    pattern = r'play\s+(.*?)\s+on\s+youtube'
+    match = re.search(pattern, query, re.IGNORECASE)
+    return match.group(1) if match else None
