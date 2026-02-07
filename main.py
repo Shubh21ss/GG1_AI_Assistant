@@ -2,6 +2,7 @@ import os
 import eel
 from engine.features import *
 from engine.cmd import *
+from engine.config import Assistant_Name
 eel.init('www')
 
 playAssistSound()

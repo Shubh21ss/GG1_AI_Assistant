@@ -223,7 +223,7 @@ $(document).ready(function () {
 
     var siriWave = new SiriWave({
         container: document.getElementById("siri-container"),
-        width: 640,
+        width: 800,
         height: 200,
         style: 'ios9',
         amplitude: 1,
@@ -249,7 +249,7 @@ $(document).ready(function () {
         $('#Oval').attr("hidden", true);
         $('#siriwave').attr("hidden", false);
         eel.playClickSound();        
-        eel.take_command()();        
+        eel.allCMDs()();        
 
     });
 

@@ -23,7 +23,7 @@ def take_command():
         eel.DisplayText("Recognizing...")
         query = r.recognize_google(audio, language='en-in')
         print(f"User said: {query}\n")
-        speak_text(f"You said: {query}")
+        # speak_text(f"You said: {query}")
         eel.DisplayText(query)
         eel.ShowHood()
 
@@ -38,3 +38,14 @@ def take_command():
 # speak_text(text)
 
 # speak_text("Hello, how can I assist you today?")
+@eel.expose
+def allCMDs():
+    query = take_command()
+    print(f"Received command: {query}")
+
+    if 'open' in query:
+        # print("Opening application...")
+        from engine.features import openApp
+        openApp(query)
+    else:
+        print("Command not recognized.")
