@@ -1,5 +1,8 @@
 import os
 import re
+from sqlite3 import Cursor
+import sqlite3
+import webbrowser
 import pygame.mixer
 import pygame.time
 import eel
@@ -8,6 +11,9 @@ from engine.cmd import speak_text
 from engine.config import Assistant_Name
 import pywhatkit as kit
 
+
+conn = sqlite3.connect('GG1.db')
+cursor = conn.cursor()
 
 #sound function for assistant startup sound
 def playAssistSound():
@@ -31,8 +37,37 @@ def playClickSound():
 
 def openApp(query):
     query = query.replace(Assistant_Name, "")
-    query = query.replace("open", "")
-    query.lower()
+    query = query.replace("open", "").strip().lower()
+    
+    if query != "":
+        try:
+            # first check the sys_cmds table for a matching application name
+            cursor.execute("SELECT path FROM sys_cmds WHERE LOWER(name)=?", (query,))
+            result = cursor.fetchall()
+
+            if len(result) != 0:
+                speak_text(f"Opening {query}")
+                os.startfile(result[0][0])
+                return
+            
+            # if the application is not found in the sys_cmds table, check the web_cmds table for a matching URL
+            cursor.execute("SELECT url FROM web_cmds WHERE LOWER(name)=?", (query,))
+            results = cursor.fetchall()
+
+            if len(results) != 0:
+                speak_text(f"Opening {query}")
+                webbrowser.open(results[0][0]) # why i am using results[0][0] because fetchall() returns a list of tuples, and we need to access the first tuple and then the first element of that tuple to get the URL
+                return
+            
+            speak_text("Opening {query}")
+            try:
+                os.system(f'start {query}.exe')
+            except Exception as e:
+                speak_text(f"Unable to open {query}. Error: {str(e)}")
+
+        except Exception as e:
+            speak_text(f"Something went wrong: {str(e)}")
+
 
     #for opening applications based on voice command for future use
     # if 'chrome' in query:
@@ -44,12 +79,12 @@ def openApp(query):
     # else:
     #     print("Application not recognized.")
     
-    if query != "":
-        speak_text(f"Opening {query}")
-        os.system(f'start {query}.exe')
+    # if query != "":
+    #     speak_text(f"Opening {query}")
+    #     os.system(f'start {query}.exe')
 
-    else:
-        speak_text(f"{query} is not recognized. Please try again.")
+    # else:
+    #     speak_text(f"{query} is not recognized. Please try again.")
 
 
 def PlayYT(query):
